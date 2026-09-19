@@ -1,1 +1,14 @@
 /node_modules
+/dist
+.DS_Store
+
+# npm run images tarafindan uretilen gorsel turevleri (prebuild ile olusur).
+# placeholders.json bilincli olarak takip edilir: TypeScript derlemesi buna ihtiyac duyar.
+src/assets/optimized/*.avif
+src/assets/optimized/*.webp
+
+# tsc -b derleme onbellegi
+*.tsbuildinfo
+
+# npm run images tarafindan uretilen sosyal medya onizleme gorseli
+public/og-image.jpg

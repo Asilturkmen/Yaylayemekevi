@@ -1,180 +1,140 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Menu, X, Phone } from 'lucide-react';
+import { site, telHref } from '../config/site';
+import { NAV_ITEMS } from '../config/navigation';
+import { t, currentLanguage, LANGUAGES } from '../i18n';
+import LanguageSwitcher from './LanguageSwitcher';
+
+const MOBILE_MENU_ID = 'mobil-menu';
+
+/** Capa linkleri dilin kok yoluna gore uretilir: /en/#about gibi. */
+const langRoot = LANGUAGES.find((l) => l.code === currentLanguage)?.path ?? '/';
+const anchor = (id: string) => `${langRoot}#${id}`;
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsOpen(false);
-    }
-  };
+  // Mobil menu acikken Escape ile kapanabilsin.
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [isOpen]);
+
+  const focusRing =
+    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded';
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-white/95 backdrop-blur-md shadow-lg' 
-        : 'bg-transparent'
-    }`}>
+    <nav
+      aria-label={t.nav.mainMenu}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
+      }`}
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <button 
-              onClick={() => scrollToSection('hero')}
-              className={`text-xl sm:text-2xl font-bold transition-colors duration-300 ${
-                isScrolled ? 'text-green-900' : 'text-white'
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-3">
+          <a
+            href={anchor('hero')}
+            className={`flex-shrink-0 text-lg sm:text-2xl font-bold transition-colors duration-300 ${focusRing} ${
+              isScrolled
+                ? 'text-green-900 focus-visible:outline-green-700'
+                : 'text-white focus-visible:outline-white'
+            }`}
+          >
+            {site.name}
+          </a>
+
+          {/* Masaustu menu */}
+          <ul className="hidden md:flex items-baseline gap-5 lg:gap-7">
+            {NAV_ITEMS.map(({ id, key }) => (
+              <li key={id}>
+                <a
+                  href={anchor(id)}
+                  className={`px-1 py-2 text-sm font-medium transition-colors duration-300 ${focusRing} ${
+                    isScrolled
+                      ? 'text-gray-700 hover:text-green-700 focus-visible:outline-green-700'
+                      : 'text-white hover:text-green-300 focus-visible:outline-white'
+                  }`}
+                >
+                  {t.nav[key]}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <LanguageSwitcher onLight={isScrolled} />
+
+            <a
+              href={telHref}
+              className={`hidden lg:flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${focusRing} ${
+                isScrolled
+                  ? 'bg-green-700 hover:bg-green-800 text-white focus-visible:outline-green-700'
+                  : 'bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm focus-visible:outline-white'
               }`}
             >
-              Yayla Yemek Evi
-            </button>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
-              <button
-                onClick={() => scrollToSection('hero')}
-                className={`px-3 py-2 text-sm font-medium transition-colors duration-300 hover:text-green-400 ${
-                  isScrolled ? 'text-gray-700 hover:text-green-600' : 'text-white'
-                }`}
-              >
-                Ana Sayfa
-              </button>
-              <button
-                onClick={() => scrollToSection('about')}
-                className={`px-3 py-2 text-sm font-medium transition-colors duration-300 hover:text-green-400 ${
-                  isScrolled ? 'text-gray-700 hover:text-green-600' : 'text-white'
-                }`}
-              >
-                Hakkımızda
-              </button>
-              <button
-                onClick={() => scrollToSection('gallery')}
-                className={`px-3 py-2 text-sm font-medium transition-colors duration-300 hover:text-green-400 ${
-                  isScrolled ? 'text-gray-700 hover:text-green-600' : 'text-white'
-                }`}
-              >
-                Galeri
-              </button>
-              <button
-                onClick={() => scrollToSection('location')}
-                className={`px-3 py-2 text-sm font-medium transition-colors duration-300 hover:text-green-400 ${
-                  isScrolled ? 'text-gray-700 hover:text-green-600' : 'text-white'
-                }`}
-              >
-                Konum
-              </button>
-              <button
-                onClick={() => scrollToSection('reviews')}
-                className={`px-3 py-2 text-sm font-medium transition-colors duration-300 hover:text-green-400 ${
-                  isScrolled ? 'text-gray-700 hover:text-green-600' : 'text-white'
-                }`}
-              >
-                Yorumlar
-              </button>
-              <button
-                onClick={() => scrollToSection('contact')}
-                className={`px-3 py-2 text-sm font-medium transition-colors duration-300 hover:text-green-400 ${
-                  isScrolled ? 'text-gray-700 hover:text-green-600' : 'text-white'
-                }`}
-              >
-                İletişim
-              </button>
-            </div>
-          </div>
-
-          {/* Contact Info & Mobile Menu Button */}
-          <div className="flex items-center gap-4">
-            {/* Phone Number - Hidden on small screens */}
-            <a 
-              href="tel:+905338471010"
-              className={`hidden lg:flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${
-                isScrolled 
-                  ? 'bg-green-600 hover:bg-green-700 text-white' 
-                  : 'bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm'
-              }`}
-            >
-              <Phone className="w-4 h-4" />
-              <span className="text-sm font-medium">Rezervasyon</span>
+              <Phone className="w-4 h-4" aria-hidden="true" />
+              <span className="text-sm font-medium">{t.nav.reserve}</span>
             </a>
 
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className={`p-2 rounded-md transition-colors duration-300 ${
-                  isScrolled ? 'text-gray-700 hover:text-green-600' : 'text-white hover:text-green-400'
-                }`}
-              >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setIsOpen((open) => !open)}
+              aria-expanded={isOpen}
+              aria-controls={MOBILE_MENU_ID}
+              aria-label={isOpen ? t.nav.closeMenu : t.nav.openMenu}
+              className={`md:hidden p-2 transition-colors duration-300 ${focusRing} ${
+                isScrolled
+                  ? 'text-gray-700 hover:text-green-700 focus-visible:outline-green-700'
+                  : 'text-white hover:text-green-300 focus-visible:outline-white'
+              }`}
+            >
+              {isOpen ? (
+                <X className="w-6 h-6" aria-hidden="true" />
+              ) : (
+                <Menu className="w-6 h-6" aria-hidden="true" />
+              )}
+            </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white/95 backdrop-blur-md rounded-lg mt-2 shadow-lg">
-              <button
-                onClick={() => scrollToSection('hero')}
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-md w-full text-left transition-colors duration-200"
+        {/* Mobil menu */}
+        <div id={MOBILE_MENU_ID} hidden={!isOpen} className="md:hidden">
+          <ul className="px-2 pt-2 pb-3 space-y-1 bg-white/95 backdrop-blur-md rounded-lg mt-2 mb-2 shadow-lg">
+            {NAV_ITEMS.map(({ id, key }) => (
+              <li key={id}>
+                <a
+                  href={anchor(id)}
+                  onClick={() => setIsOpen(false)}
+                  className={`block px-3 py-2 text-base font-medium text-gray-700 hover:text-green-700 hover:bg-green-50 focus-visible:outline-green-700 w-full transition-colors duration-200 ${focusRing}`}
+                >
+                  {t.nav[key]}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a
+                href={telHref}
+                onClick={() => setIsOpen(false)}
+                className={`flex items-center gap-2 px-3 py-2 bg-green-700 hover:bg-green-800 text-white focus-visible:outline-green-700 transition-colors duration-200 ${focusRing}`}
               >
-                Ana Sayfa
-              </button>
-              <button
-                onClick={() => scrollToSection('about')}
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-md w-full text-left transition-colors duration-200"
-              >
-                Hakkımızda
-              </button>
-              <button
-                onClick={() => scrollToSection('gallery')}
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-md w-full text-left transition-colors duration-200"
-              >
-                Galeri
-              </button>
-              <button
-                onClick={() => scrollToSection('location')}
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-md w-full text-left transition-colors duration-200"
-              >
-                Konum
-              </button>
-              <button
-                onClick={() => scrollToSection('reviews')}
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-md w-full text-left transition-colors duration-200"
-              >
-                Yorumlar
-              </button>
-              <button
-                onClick={() => scrollToSection('contact')}
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-md w-full text-left transition-colors duration-200"
-              >
-                İletişim
-              </button>
-              <a 
-                href="tel:+905338471010"
-                className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors duration-200"
-              >
-                <Phone className="w-4 h-4" />
-                <span className="font-medium">Rezervasyon</span>
+                <Phone className="w-4 h-4" aria-hidden="true" />
+                <span className="font-medium">{t.nav.reserve}</span>
               </a>
-            </div>
-          </div>
-        )}
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );

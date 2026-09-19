@@ -131,6 +131,7 @@ export const ru: Translation = {
     address: 'Адрес',
     facebook: 'Facebook',
     instagram: 'Instagram',
+    followUs: 'Мы в соцсетях',
     reserveTitle: 'Забронировать столик',
     reserveText:
       'Рекомендуем бронировать заранее, особенно на выходные. ' +

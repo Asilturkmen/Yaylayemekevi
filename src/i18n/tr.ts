@@ -138,6 +138,7 @@ export const tr = {
     address: 'Adres',
     facebook: 'Facebook',
     instagram: 'Instagram',
+    followUs: 'Bizi takip edin',
     reserveTitle: 'Rezervasyon Yapın',
     reserveText:
       'Özellikle hafta sonları için rezervasyon yapmanızı öneriyoruz. ' +

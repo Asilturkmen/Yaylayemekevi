@@ -1,169 +1,122 @@
-import { Phone, Mail, MapPin, Instagram, Facebook, Navigation } from 'lucide-react';
-import { site, formattedAddress, telHref, mailHref } from '../config/site';
-import { t, fill, currentLanguage, LANGUAGES } from '../i18n';
+import { Instagram, Facebook } from 'lucide-react';
+import { site, telHref, mailHref } from '../config/site';
+import { t, currentLanguage, LANGUAGES } from '../i18n';
 import { NAV_ITEMS } from '../config/navigation';
-import { formatTime } from '../lib/hours';
 import { useOpenStatus } from '../hooks/useOpenStatus';
 
 /** Capa linkleri bu dilin kok yolunu kullanir. */
 const langRoot = LANGUAGES.find((l) => l.code === currentLanguage)?.path ?? '/';
 
-/** Ayni saatlere sahip ardisik gunleri "Salı - Pazar" gibi tek satirda toplar. */
-const summarizeHours = () => {
-  const order = [1, 2, 3, 4, 5, 6, 0];
-  const rows: { label: string; value: string }[] = [];
-
-  for (const index of order) {
-    const day = site.hours[index];
-    const value = day.closed ? t.location.closed : `${day.opens} - ${formatTime(day.closes)}`;
-    const previous = rows[rows.length - 1];
-
-    if (previous && previous.value === value) {
-      // Araligi genislet: "Salı" -> "Salı - Çarşamba"
-      previous.label = `${previous.label.split(' - ')[0]} - ${t.weekdays[index]}`;
-    } else {
-      rows.push({ label: t.weekdays[index], value });
-    }
-  }
-
-  return rows;
-};
-
+/**
+ * Site alt bilgisi -- ince bir kapanis seridi.
+ *
+ * Tasarim notu: burasi eskiden adres, telefon, dort satirlik iletisim
+ * listesi ve tam calisma saati tablosu iceriyordu; mobilde 825px, yani
+ * neredeyse bir ekran boyu yer kapliyordu. Tek sayfalik bir sitede bunlarin
+ * hepsi zaten yukarida duruyor (saatler Konum'da tam tablo halinde, adres
+ * ve telefon hem Konum hem Iletisim'de), yani footer siteyi ikinci kez
+ * gosteriyordu. Kucuk tanitim siteleri icin onerilen araliga (200-300px)
+ * inmek uzere tekrar eden her sey cikarildi.
+ *
+ * Geriye yalnizca footer'a ozgu olanlar kaldi: marka, canli acik/kapali
+ * durumu, sosyal hesaplar, bolum linkleri ve telif.
+ *
+ * Mobile-first: taban stiller telefon icin ortalanmis ve dikey; sm: ile
+ * yatay duzene ve sola yaslanmaya gecer.
+ */
 const Footer = () => {
   const status = useOpenStatus();
-  const hourRows = summarizeHours();
+
+  const link =
+    'text-green-200 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 rounded transition-colors duration-200';
+
+  const socialButton =
+    'p-3 rounded-full bg-green-900 hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 transition-colors duration-200';
 
   return (
     <footer className="bg-green-950 text-green-100">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Marka */}
-          <div className="lg:col-span-1">
-            <p className="text-xl font-bold text-white">{site.name}</p>
-            <p className="mt-2 text-sm text-green-300">{t.hero.tagline}</p>
-            <p className="mt-4 text-sm leading-relaxed text-green-200">
-              {fill(t.footer.brandText, { year: site.foundingYear })}
-            </p>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        {/*
+          Mobilde dikey: marka -> durum/sosyal -> menu.
+          lg: tek satir: marka | menu | durum/sosyal. DOM sirasi mobil icin
+          dogru oldugundan masaustu sirasi order ile ayarlanir; boylece
+          genis ekranda ortada kalan devasa bosluk menuyle doluyor.
+        */}
+        <div className="flex flex-col items-center gap-5 text-center lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:text-left">
+          <div className="lg:order-1 lg:shrink-0">
+            <p className="text-lg sm:text-xl font-bold text-white">{site.name}</p>
+            <p className="mt-1 text-sm text-green-300">{t.hero.tagline}</p>
+          </div>
+
+          <div className="order-2 lg:order-3 lg:shrink-0 flex flex-wrap items-center justify-center gap-3">
+            {/* Kibris saatine gore canli hesaplanir. */}
             <span
               aria-live="polite"
-              className={`mt-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ${
                 status.open ? 'bg-green-800 text-green-100' : 'bg-green-900 text-green-300'
               }`}
             >
               <span
                 aria-hidden="true"
-                className={`w-2 h-2 rounded-full ${
+                className={`w-2 h-2 rounded-full shrink-0 ${
                   status.open ? 'bg-green-400' : 'bg-green-600'
                 }`}
               />
               {status.open ? t.location.openNow : t.location.closedNow}
             </span>
+
+            <a
+              href={site.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${site.name} ${t.footer.instagramLabel}`}
+              className={socialButton}
+            >
+              <Instagram className="w-5 h-5" aria-hidden="true" />
+            </a>
+            <a
+              href={site.social.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${site.name} ${t.footer.facebookLabel}`}
+              className={socialButton}
+            >
+              <Facebook className="w-5 h-5" aria-hidden="true" />
+            </a>
           </div>
 
-          {/* Bolumler */}
-          <nav aria-label={t.nav.footerMenu}>
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-white">
-              {t.footer.pages}
-            </h2>
-            <ul className="mt-4 space-y-2 text-sm">
+          {/* Bolum linkleri: dikey liste yerine tek satirda sarmalanir */}
+          <nav
+            aria-label={t.nav.footerMenu}
+            className="order-3 lg:order-2 w-full border-t border-green-900 pt-4 lg:w-auto lg:border-t-0 lg:pt-0"
+          >
+            <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-0.5 text-sm lg:gap-x-6">
               {NAV_ITEMS.map(({ id, key }) => (
                 <li key={id}>
-                  <a
-                    href={`${langRoot}#${id}`}
-                    className="text-green-200 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 rounded transition-colors duration-200"
-                  >
+                  <a href={`${langRoot}#${id}`} className={`inline-block py-1.5 ${link}`}>
                     {t.nav[key]}
                   </a>
                 </li>
               ))}
             </ul>
           </nav>
-
-          {/* Iletisim */}
-          <div>
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-white">
-              {t.footer.contact}
-            </h2>
-            <ul className="mt-4 space-y-3 text-sm">
-              <li className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-green-400" aria-hidden="true" />
-                <span className="text-green-200">{formattedAddress}</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Phone className="w-4 h-4 mt-0.5 shrink-0 text-green-400" aria-hidden="true" />
-                <a
-                  href={telHref}
-                  className="text-green-200 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 rounded transition-colors duration-200"
-                >
-                  {site.phone.display}
-                </a>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Mail className="w-4 h-4 mt-0.5 shrink-0 text-green-400" aria-hidden="true" />
-                <a
-                  href={mailHref}
-                  className="text-green-200 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 rounded break-all transition-colors duration-200"
-                >
-                  {site.email}
-                </a>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Navigation className="w-4 h-4 mt-0.5 shrink-0 text-green-400" aria-hidden="true" />
-                <a
-                  href={site.maps.directions}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-200 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 rounded transition-colors duration-200"
-                >
-                  {t.footer.directions}
-                </a>
-              </li>
-            </ul>
-
-            <div className="mt-5 flex items-center gap-3">
-              <a
-                href={site.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${site.name} ${t.footer.instagramLabel}`}
-                className="bg-green-900 hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 p-2.5 rounded-full transition-colors duration-200"
-              >
-                <Instagram className="w-5 h-5" aria-hidden="true" />
-              </a>
-              <a
-                href={site.social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${site.name} ${t.footer.facebookLabel}`}
-                className="bg-green-900 hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 p-2.5 rounded-full transition-colors duration-200"
-              >
-                <Facebook className="w-5 h-5" aria-hidden="true" />
-              </a>
-            </div>
-          </div>
-
-          {/* Saatler */}
-          <div>
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-white">
-              {t.footer.hours}
-            </h2>
-            <dl className="mt-4 space-y-2 text-sm">
-              {hourRows.map(({ label, value }) => (
-                <div key={label} className="flex justify-between gap-4">
-                  <dt className="text-green-300">{label}</dt>
-                  <dd className="text-green-100 whitespace-nowrap">{value}</dd>
-                </div>
-              ))}
-            </dl>
-            <p className="mt-4 text-xs text-green-300">
-              {t.footer.reservationHint}
-            </p>
-          </div>
         </div>
 
-        <div className="mt-12 border-t border-green-900 pt-6 text-center text-xs text-green-400">
+        {/* Telif + dogrudan iletisim */}
+        <div className="mt-4 border-t border-green-900 pt-4 flex flex-col items-center gap-1.5 text-xs text-green-400 sm:flex-row sm:justify-between sm:gap-4 lg:mt-6 lg:pt-5">
           <p>
             &copy; {new Date().getFullYear()} {site.name}. {t.footer.rights}
+          </p>
+          <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5">
+            <a href={telHref} className={`py-1 ${link}`}>
+              {site.phone.display}
+            </a>
+            <span aria-hidden="true" className="text-green-700">
+              ·
+            </span>
+            <a href={mailHref} className={`py-1 break-all ${link}`}>
+              {site.email}
+            </a>
           </p>
         </div>
       </div>

@@ -9,8 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "images": "node scripts/optimize-images.mjs",
-    "prebuild": "npm run images",
-    "smoke": "node scripts/smoke-test.mjs"
+    "prebuild": "npm run images && npm run icons",
+    "smoke": "node scripts/smoke-test.mjs",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",

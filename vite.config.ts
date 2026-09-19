@@ -143,6 +143,12 @@ const seo = (): Plugin => ({
           { tag: 'meta', attrs: { name: 'keywords', content: language.seo.keywords }, injectTo: 'head' },
           { tag: 'link', attrs: { rel: 'canonical', href: pageUrl }, injectTo: 'head' },
 
+          // Tarayici ikonlari. SVG modern tarayicilarda kullanilir; .ico
+          // eski tarayicilar ve dogrudan /favicon.ico isteyen araclar icin.
+          { tag: 'link', attrs: { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }, injectTo: 'head' },
+          { tag: 'link', attrs: { rel: 'icon', sizes: '48x48', href: '/favicon.ico' }, injectTo: 'head' },
+          { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }, injectTo: 'head' },
+
           // hreflang: Google'a uc dilin ayni sayfanin karsiliklari oldugunu soyler.
           ...LANGUAGES.map((alternate) => ({
             tag: 'link',

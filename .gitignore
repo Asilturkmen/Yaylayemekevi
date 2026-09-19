@@ -12,3 +12,9 @@ src/assets/optimized/*.webp
 
 # npm run images tarafindan uretilen sosyal medya onizleme gorseli
 public/og-image.jpg
+
+# npm run icons tarafindan uretilen ikonlar (favicon.svg kaynak, o takip edilir)
+public/favicon.ico
+public/apple-touch-icon.png
+public/icon-192.png
+public/icon-512.png

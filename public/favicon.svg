@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Yayla Yemek Evi">
+  <!--
+    Favicon kaynagi. Harf bilincli olarak <text> ile degil yol olarak
+    cizildi: <text> sistem fontuna baglidir ve platformdan platforma
+    degisir, yol her yerde birebir ayni gorunur.
+
+    Renk #15803d = Tailwind green-700, sitedeki buton rengiyle ayni.
+    Kare kenarlari 16px'te bile secilebilsin diye genis yuvarlatildi.
+  -->
+  <rect width="64" height="64" rx="14" fill="#15803d" />
+  <path
+    d="M18 17 L32 33 L46 17 M32 33 L32 50"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="9"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

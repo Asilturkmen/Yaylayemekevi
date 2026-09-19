@@ -131,6 +131,7 @@ export const en: Translation = {
     address: 'Address',
     facebook: 'Facebook',
     instagram: 'Instagram',
+    followUs: 'Follow us',
     reserveTitle: 'Make a Reservation',
     reserveText:
       'We recommend booking ahead, especially at weekends. ' +

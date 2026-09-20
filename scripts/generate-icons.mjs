@@ -15,14 +15,20 @@ import sharp from 'sharp';
 
 const PUBLIC = 'public';
 const SOURCE = join(PUBLIC, 'favicon.svg');
-/** favicon.svg icindeki kare rengi; seffaf olamayacak yerlerde zemin olur. */
-const BRAND = '#15803d';
+/** favicon.svg icindeki karonun rengi; seffaf olamayacak yerlerde zemin olur. */
+const TILE_BG = '#FAEFDA';
 
-const png = async (size, options = {}) =>
-  sharp(await readFile(SOURCE), { density: 384 })
-    .resize(size, size, { fit: 'contain', background: options.background ?? { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png({ compressionLevel: 9 })
-    .toBuffer();
+/**
+ * opaque: seffaf pikselleri verilen renkle doldurur. resize'in background
+ * secenegi yetmez; o yalnizca en-boy farkindan dogan bosluga uygulanir,
+ * kaynaktaki alfayi duzlestirmez. Karonun yuvarlak koseleri bu yuzden
+ * seffaf kaliyordu.
+ */
+const png = async (size, { opaque } = {}) => {
+  let image = sharp(await readFile(SOURCE), { density: 384 }).resize(size, size);
+  if (opaque) image = image.flatten({ background: opaque });
+  return image.png({ compressionLevel: 9 }).toBuffer();
+};
 
 /**
  * ICO dosyasi yazar. Vista sonrasi ICO, PNG verisini dogrudan gomebilir;
@@ -64,8 +70,8 @@ const main = async () => {
   const ico = buildIco(icoImages);
   await writeFile(join(PUBLIC, 'favicon.ico'), ico);
 
-  // iOS ana ekran ikonu seffaflik desteklemez: zemin marka rengiyle dolduruluyor.
-  await writeFile(join(PUBLIC, 'apple-touch-icon.png'), await png(180, { background: BRAND }));
+  // iOS ana ekran ikonu seffaflik desteklemez: yuvarlak kose paylari karo rengiyle dolduruluyor.
+  await writeFile(join(PUBLIC, 'apple-touch-icon.png'), await png(180, { opaque: TILE_BG }));
   await writeFile(join(PUBLIC, 'icon-192.png'), await png(192));
   await writeFile(join(PUBLIC, 'icon-512.png'), await png(512));
 

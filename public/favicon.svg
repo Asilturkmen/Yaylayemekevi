@@ -1,19 +1,87 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Yayla Yemek Evi">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img"
+     aria-label="Yayla Yemek Evi - tavşan kanı çay dolu ince belli bardak">
   <!--
-    Favicon kaynagi. Harf bilincli olarak <text> ile degil yol olarak
-    cizildi: <text> sistem fontuna baglidir ve platformdan platforma
-    degisir, yol her yerde birebir ayni gorunur.
+    Favicon kaynagi: ince belli cay bardagi, icinde tavsan kani cay.
 
-    Renk #15803d = Tailwind green-700, sitedeki buton rengiyle ayni.
-    Kare kenarlari 16px'te bile secilebilsin diye genis yuvarlatildi.
+    SILUET OLCULERI
+    Serbest cizim degil; Pasabahce Incebelli (42381 / 42401) teknik
+    verisinden ve duz karsidan cekilmis urun fotografindan olculerek
+    cikarildi. Fotograftan olculen taban/agiz orani (0.624) ureticinin
+    verdigi 37/60 = 0.617 ile ortustugu icin olcum dogrulanmis sayildi.
+
+      yukseklik        90 mm
+      agiz capi        60 mm   (ayni zamanda bardagin en genis yeri)
+      taban capi       37 mm
+      karin  (%18)     44.6 mm  <- govdenin en genis yeri, tabana yakin
+      bel    (%48)     38.5 mm  <- en dar yer; adini buradan alir
+      %70              43.4 mm
+      %84              51.7 mm
+
+    Yuzdeler tabandan olculen yukseklik oranidir. Yol 64x64 kutuda
+    yukseklik 48 birim olacak sekilde olceklendi (y: 8 -> 56).
+
+    ZEMIN NEDEN KREM
+    Zemin once marka yesiliydi (#15803d). Sorun sudur: cay kirmizisi ile
+    o yesil arasindaki kontrast orani yalnizca 2.3:1. Ikisi de doygun ve
+    parlaklik farklari dusuk oldugu icin kucuk boyutta birbirine karisip
+    titresiyor, goz once yesil kareyi seciyordu; bardak one cikmiyordu.
+    Krem zeminde ayni oran ~9:1. Artik ikonun konusu bardagin kendisi.
+
+    Yesil kayboldu sayilmaz: bardagin konturu green-900 (#14532d). Marka
+    rengi cizgide duruyor, kutleyi ele gecirmiyor.
+
+    #FAEFDA bilincli olarak tam beyaz degil: bembeyaz sekme seridinde
+    karo kenari tamamen kaybolurdu. Bu tonda acik zeminde hafif bir
+    kenar kaliyor, koyu zeminde ise sicak bir cip gibi okunuyor.
+
+    RENKLER
+    Cay rengi uc ayri referans fotografindan orneklendi; tavsan kani
+    isik aldiginda kirmizi-turuncu, derinlestikce koyu kizil goruldugu
+    icin duz renk yerine dikey gecis kullanildi.
+
+    KUCUK BOYUT
+    16px'te siluetin beli kaybolur; okunakligi ayakta tutan sey kirmizi
+    kutlenin buyuklugudur. Bu yuzden cay seviyesi %88'de: bardagin bos
+    ust kismi sadece camin cam oldugunu belli edecek kadar birakildi.
   -->
-  <rect width="64" height="64" rx="14" fill="#15803d" />
+  <defs>
+    <clipPath id="bardak">
+      <path d="M 41.867 56 C 42.613 54.32 43.893 51.2 43.893 47.36 C 43.893 42.56 42.267 37.28 42.267 32.96 C 42.267 28.16 42.88 25.04 43.573 22.4 C 44.587 18.56 46.56 12.8 48 8 L 16 8 C 17.44 12.8 19.413 18.56 20.427 22.4 C 21.12 25.04 21.733 28.16 21.733 32.96 C 21.733 37.28 20.107 42.56 20.107 47.36 C 20.107 51.2 21.387 54.32 22.133 56 Z" />
+    </clipPath>
+    <!-- Yuzeye yakin isik gorur, dibe dogru koyulasir. -->
+    <linearGradient id="cay" x1="0" y1="13.76" x2="0" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D2411E" />
+      <stop offset="0.55" stop-color="#A81A0E" />
+      <stop offset="1" stop-color="#7E0C06" />
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="14" fill="#FAEFDA" />
+
+  <g clip-path="url(#bardak)">
+    <!-- Bos cam govde: zeminden bir tik daha parlak, boylece cam okunur. -->
+    <rect width="64" height="64" fill="#FFFDF7" />
+    <!-- Cay: bardagin %88'ine kadar. -->
+    <rect x="0" y="13.76" width="64" height="42.24" fill="url(#cay)" />
+    <!--
+      Cam parlamasi. Yalnizca govdenin ust yarisinda duruyor: bardagin
+      duvari orada neredeyse duz, asagi uzatilinca bel kivriminin uzerinden
+      gecip pipete benziyordu. 32px altinda zaten kaybolur; buyuk boyutta
+      yuzeye derinlik verir.
+    -->
+    <rect x="25.4" y="16.4" width="3.1" height="15.5" rx="1.55" fill="#ffffff" opacity="0.16" />
+  </g>
+
+  <!--
+    Kontur. Hem bardagin sinirini cizer hem de markanin yesilini tasir.
+    1.6: 1.3'te acik zeminde silik kaliyordu, 2.2'de 16px'te koyu cerceve
+    kirmiziyi yiyordu.
+  -->
   <path
-    d="M18 17 L32 33 L46 17 M32 33 L32 50"
+    d="M 41.867 56 C 42.613 54.32 43.893 51.2 43.893 47.36 C 43.893 42.56 42.267 37.28 42.267 32.96 C 42.267 28.16 42.88 25.04 43.573 22.4 C 44.587 18.56 46.56 12.8 48 8 L 16 8 C 17.44 12.8 19.413 18.56 20.427 22.4 C 21.12 25.04 21.733 28.16 21.733 32.96 C 21.733 37.28 20.107 42.56 20.107 47.36 C 20.107 51.2 21.387 54.32 22.133 56 Z"
     fill="none"
-    stroke="#ffffff"
-    stroke-width="9"
-    stroke-linecap="round"
+    stroke="#14532d"
+    stroke-width="1.6"
     stroke-linejoin="round"
   />
 </svg>

@@ -140,8 +140,6 @@ export const ru: Translation = {
   },
 
   footer: {
-    instagramLabel: 'страница в Instagram',
-    facebookLabel: 'страница в Facebook',
     rights: 'Все права защищены.',
     developedBy: 'Разработано {dev}',
   },

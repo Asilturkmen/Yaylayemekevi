@@ -140,8 +140,6 @@ export const en: Translation = {
   },
 
   footer: {
-    instagramLabel: 'Instagram page',
-    facebookLabel: 'Facebook page',
     rights: 'All rights reserved.',
     developedBy: 'Developed by {dev}',
   },

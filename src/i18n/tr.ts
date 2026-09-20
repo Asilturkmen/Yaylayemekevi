@@ -147,8 +147,6 @@ export const tr = {
   },
 
   footer: {
-    instagramLabel: 'Instagram sayfası',
-    facebookLabel: 'Facebook sayfası',
     rights: 'Tüm hakları saklıdır.',
     /** {dev} yerine gelistiricinin alan adi link olarak yerlesir. */
     developedBy: '{dev} tarafından geliştirildi',

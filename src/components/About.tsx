@@ -25,7 +25,7 @@ const About = () => {
             </p>
 
             <p className="text-lg text-gray-700 leading-relaxed mb-8">
-              {fill(t.about.ownerNote, { owner: site.owner })}
+              {t.about.welcomeNote}
             </p>
 
             <div className="space-y-6">

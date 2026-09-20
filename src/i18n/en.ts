@@ -57,9 +57,9 @@ export const en: Translation = {
       '{name} is a village restaurant where nature and traditional flavours meet. In Pamuklu ' +
       'we serve home cooking and breakfasts prepared with our own fresh produce, for a meal ' +
       'our guests remember.',
-    ownerNote:
-      'Our owner {owner} welcomes everyone who walks through the door as a guest rather than ' +
-      'a customer. You will not leave the table without tasting something on the house.',
+    welcomeNote:
+      'We welcome everyone who walks through our door as a guest, not a customer. ' +
+      'You will not leave the table without tasting something on the house.',
     features: [
       {
         title: 'Natural Produce',

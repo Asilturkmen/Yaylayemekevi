@@ -30,9 +30,6 @@ export const site = {
   url: 'https://yaylayemekevi.com',
   locale: 'tr_TR',
   foundingYear: 2018,
-  /** Hakkimizda metninde kullanilir. Kullanici adin gecmesini onayladi. */
-  owner: "Cavit Bey",
-
   phone: {
     /** Ekranda gorunen bicim. */
     display: '+90 533 847 1010',

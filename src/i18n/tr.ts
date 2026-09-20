@@ -62,9 +62,9 @@ export const tr = {
       '{name}, doğallık ve geleneksel tatların buluştuğu bir köy restoranıdır. ' +
       'Pamuklu Köyü’nde, kendi üretimimiz taze ürünlerle hazırladığımız ev yemekleri ve ' +
       'kahvaltılarla misafirlerimize unutulmaz bir lezzet deneyimi sunuyoruz.',
-    ownerNote:
-      'İşletme sahibimiz {owner}, kapımızdan girenleri müşteri değil misafir olarak ' +
-      'karşılıyor. Sofranızda ikramlarımızı görmeden kalkmanıza izin vermeyiz.',
+    welcomeNote:
+      'Kapımızdan girenleri müşteri olarak değil, misafir olarak karşılıyoruz. ' +
+      'Sofranızda ikramlarımızı görmeden kalkmanıza izin vermeyiz.',
     features: [
       {
         title: 'Doğal Ürünler',

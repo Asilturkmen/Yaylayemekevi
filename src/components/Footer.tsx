@@ -1,11 +1,21 @@
 import { Instagram, Facebook } from 'lucide-react';
-import { site, telHref, mailHref } from '../config/site';
+import { site } from '../config/site';
 import { t, currentLanguage, LANGUAGES } from '../i18n';
 import { NAV_ITEMS } from '../config/navigation';
 import { useOpenStatus } from '../hooks/useOpenStatus';
 
 /** Capa linkleri bu dilin kok yolunu kullanir. */
 const langRoot = LANGUAGES.find((l) => l.code === currentLanguage)?.path ?? '/';
+
+/** Siteyi gelistiren. Isletme verisi olmadigi icin site.ts'e konmadi. */
+const DEVELOPER = { name: 'asilturkmen.com', url: 'https://asilturkmen.com' };
+
+/**
+ * Kredi cumlesinde yalnizca alan adi link olacak, ama linkin cumle icindeki
+ * yeri dile gore degisiyor (TR'de basta, EN ve RU'da sonda). Bu yuzden metin
+ * {dev} yer tutucusundan ikiye bolunup linkin iki yanina yaziliyor.
+ */
+const [creditBefore, creditAfter] = t.footer.developedBy.split('{dev}');
 
 /**
  * Site alt bilgisi -- ince bir kapanis seridi.
@@ -19,7 +29,9 @@ const langRoot = LANGUAGES.find((l) => l.code === currentLanguage)?.path ?? '/';
  * inmek uzere tekrar eden her sey cikarildi.
  *
  * Geriye yalnizca footer'a ozgu olanlar kaldi: marka, canli acik/kapali
- * durumu, sosyal hesaplar, bolum linkleri ve telif.
+ * durumu, sosyal hesaplar, bolum linkleri, telif ve gelistirici kredisi.
+ * Telefon ve e-posta da bilincli olarak cikarildi; ikisi de Iletisim
+ * bolumunde duruyor ve footer'in minimal kalmasi istendi.
  *
  * Mobile-first: taban stiller telefon icin ortalanmis ve dikey; sm: ile
  * yatay duzene ve sola yaslanmaya gecer.
@@ -102,21 +114,22 @@ const Footer = () => {
           </nav>
         </div>
 
-        {/* Telif + dogrudan iletisim */}
+        {/* Telif + gelistirici kredisi */}
         <div className="mt-4 border-t border-green-900 pt-4 flex flex-col items-center gap-1.5 text-xs text-green-400 sm:flex-row sm:justify-between sm:gap-4 lg:mt-6 lg:pt-5">
           <p>
             &copy; {new Date().getFullYear()} {site.name}. {t.footer.rights}
           </p>
-          <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5">
-            <a href={telHref} className={`py-1 ${link}`}>
-              {site.phone.display}
+          <p>
+            {creditBefore}
+            <a
+              href={DEVELOPER.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`py-1 ${link}`}
+            >
+              {DEVELOPER.name}
             </a>
-            <span aria-hidden="true" className="text-green-700">
-              ·
-            </span>
-            <a href={mailHref} className={`py-1 break-all ${link}`}>
-              {site.email}
-            </a>
+            {creditAfter}
           </p>
         </div>
       </div>

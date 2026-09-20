@@ -140,15 +140,9 @@ export const ru: Translation = {
   },
 
   footer: {
-    pages: 'Страницы',
-    contact: 'Контакты',
-    hours: 'Часы работы',
-    brandText:
-      'С {year} года мы работаем в Памуклу с собственными свежими продуктами.',
-    directions: 'Построить маршрут',
     instagramLabel: 'страница в Instagram',
     facebookLabel: 'страница в Facebook',
-    reservationHint: 'На выходные рекомендуем бронировать столик.',
     rights: 'Все права защищены.',
+    developedBy: 'Разработано {dev}',
   },
 };

@@ -140,15 +140,9 @@ export const en: Translation = {
   },
 
   footer: {
-    pages: 'Pages',
-    contact: 'Contact',
-    hours: 'Opening Hours',
-    brandText:
-      'Since {year} we have been serving Pamuklu with our own fresh produce.',
-    directions: 'Get directions',
     instagramLabel: 'Instagram page',
     facebookLabel: 'Facebook page',
-    reservationHint: 'Booking is recommended at weekends.',
     rights: 'All rights reserved.',
+    developedBy: 'Developed by {dev}',
   },
 };

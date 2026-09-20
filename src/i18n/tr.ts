@@ -147,16 +147,11 @@ export const tr = {
   },
 
   footer: {
-    pages: 'Sayfalar',
-    contact: 'İletişim',
-    hours: 'Çalışma Saatleri',
-    brandText:
-      '{year}’den beri Pamuklu Köyü’nde, kendi üretimimiz taze ürünlerle hizmetinizdeyiz.',
-    directions: 'Yol tarifi al',
     instagramLabel: 'Instagram sayfası',
     facebookLabel: 'Facebook sayfası',
-    reservationHint: 'Hafta sonları için rezervasyon önerilir.',
     rights: 'Tüm hakları saklıdır.',
+    /** {dev} yerine gelistiricinin alan adi link olarak yerlesir. */
+    developedBy: '{dev} tarafından geliştirildi',
   },
 };
 

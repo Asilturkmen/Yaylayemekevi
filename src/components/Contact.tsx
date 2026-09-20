@@ -1,26 +1,43 @@
-import { Phone, MapPin, Instagram, Facebook, Navigation, Clock } from 'lucide-react';
-import { site, telHref, formattedAddress } from '../config/site';
+import { Phone, Mail, MapPin, Instagram, Facebook, Clock } from 'lucide-react';
+import { site, telHref, mailHref, formattedAddress } from '../config/site';
 import { t } from '../i18n';
 import { useOpenStatus } from '../hooks/useOpenStatus';
 
 /**
  * Iletisim bolumu.
  *
- * Tasarim notu: bu bolum eskiden koyu yesil zeminliydi ve hemen altindaki
+ * Tasarim notu 1: bu bolum eskiden koyu yesil zeminliydi ve hemen altindaki
  * footer da koyu oldugu icin ikisi tek bir footer gibi okunuyordu. Artik
  * sitenin geri kalaniyla ayni acik kart dilini kullaniyor (green-50 zemin +
  * beyaz kartlar, About ve Location ile ayni). Koyu yesil yalnizca tek bir
  * vurgu kartinda kaliyor; bu hem bolumu footer'dan ayiriyor hem de
  * rezervasyon cagrisini one cikariyor.
  *
+ * Tasarim notu 2: buradaki "Yol tarifi al" butonu kaldirildi. Yol tarifi bir
+ * navigasyon eylemi; yeri, haritanin ve adresin zaten bulundugu Konum bolumu
+ * (bkz. Location.tsx). Iletisim bolumu yalnizca iletisim bilgisi tasir:
+ * telefon, e-posta, adres ve sosyal hesaplar. Boylece iki bolum birbirini
+ * tekrar etmiyor ve her kartin tek bir isi oluyor.
+ *
  * Yerlesim mobile-first: taban stiller telefon icindir (tek kolon, kucuk
- * punto, dar bosluk), genis ekran duzenlemeleri sm: ve lg: ile eklenir.
+ * punto, dar bosluk, tam genislikte dokunma hedefleri), genis ekran
+ * duzenlemeleri sm: ve lg: ile eklenir.
  */
 const Contact = () => {
   const status = useOpenStatus();
 
   const focusRing =
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2';
+
+  /** Bilgi satirlari: mobilde 44px'i asan rahat dokunma hedefleri. */
+  const infoRow = 'flex items-start gap-4 rounded-xl px-3 py-3';
+
+  const infoIcon = 'bg-green-100 text-green-700 p-2.5 rounded-full shrink-0';
+
+  const infoLabel =
+    'block text-xs font-semibold uppercase tracking-wider text-green-700';
+
+  const infoValue = 'mt-0.5 block text-sm sm:text-base text-gray-800';
 
   return (
     <section
@@ -43,12 +60,13 @@ const Contact = () => {
         </div>
 
         {/*
-          Mobilde tek kolon: once rezervasyon karti, sonra adres, sonra sosyal.
-          lg: asimetrik 3/2 izgara -- footer'in esit 4 kolonundan bilincli
+          Mobilde tek kolon: once rezervasyon karti (birincil eylem arama),
+          sonra diger iletisim bilgileri ve sosyal hesaplar.
+          lg: asimetrik 3/2 izgara -- footer'in esit kolonlarindan bilincli
           olarak farkli, boylece iki bolum birbirine benzemiyor.
         */}
         <div className="grid gap-5 sm:gap-6 lg:grid-cols-5">
-          {/* Rezervasyon vurgu karti */}
+          {/* Rezervasyon vurgu karti: telefon burada, tek ve net cagri. */}
           <div className="lg:col-span-3 bg-green-800 text-white rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 flex flex-col">
             <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4">
               {t.contact.reserveTitle}
@@ -79,10 +97,14 @@ const Contact = () => {
                   {t.contact.callNow}
                 </a>
 
-                {/* Kibris saatine gore canli hesaplanir. */}
+                {/*
+                  Kibris saatine gore canli hesaplanir.
+                  self-center: mobilde tam genislige yayilirsa butonun
+                  ikizi gibi gorunuyor; bu bir durum rozeti, eylem degil.
+                */}
                 <span
                   aria-live="polite"
-                  className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs sm:text-sm font-semibold ${
+                  className={`self-center sm:self-auto inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs sm:text-sm font-semibold ${
                     status.open
                       ? 'bg-green-700 text-green-50'
                       : 'bg-green-900 text-green-300'
@@ -101,33 +123,48 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Adres + sosyal medya tek kartta */}
-          <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-5 sm:p-6 lg:p-7 flex flex-col">
-            <div className="flex items-start gap-4">
-              <div className="bg-green-100 p-3 rounded-full shrink-0">
-                <MapPin className="w-6 h-6 text-green-700" aria-hidden="true" />
-              </div>
-              <div className="min-w-0">
-                <h3 className="font-semibold text-green-900 mb-1">
-                  {t.contact.address}
-                </h3>
-                <p className="text-sm sm:text-base text-gray-700">
-                  {formattedAddress}
-                </p>
+          {/* Diger iletisim bilgileri: e-posta, telefon, adres ve sosyal. */}
+          <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-4 sm:p-5 lg:p-6 flex flex-col">
+            {/* -mx-1: satir zemini kart kenarina dogru bir tik genisler. */}
+            <ul className="-mx-1 space-y-1">
+              {/* Telefon bilincli olarak yok: yan karttaki buyuk numara ayni
+                  bilgiyi zaten veriyor, burada tekrari gurultu yaratiyordu. */}
+              <li>
                 <a
-                  href={site.maps.directions}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`mt-3 sm:mt-4 inline-flex items-center gap-2 bg-green-50 hover:bg-green-100 text-green-800 px-4 py-3 rounded-full text-sm sm:text-base font-medium ${focusRing} focus-visible:outline-green-700 transition-colors duration-200`}
+                  href={mailHref}
+                  className={`group ${infoRow} hover:bg-green-50 ${focusRing} focus-visible:outline-green-700 transition-colors duration-200`}
                 >
-                  <Navigation className="w-4 h-4 shrink-0" aria-hidden="true" />
-                  {t.location.directions}
+                  <span className={infoIcon}>
+                    <Mail className="w-5 h-5" aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className={infoLabel}>{t.contact.email}</span>
+                    {/* break-all: uzun e-posta dar ekranda karti tasirmasin */}
+                    <span
+                      className={`${infoValue} break-all group-hover:text-green-900`}
+                    >
+                      {site.email}
+                    </span>
+                  </span>
                 </a>
-              </div>
-            </div>
+              </li>
+
+              {/* Adres duz bilgi olarak duruyor; yol tarifi Konum bolumunde. */}
+              <li className={infoRow}>
+                <span className={infoIcon}>
+                  <MapPin className="w-5 h-5" aria-hidden="true" />
+                </span>
+                <span className="min-w-0">
+                  <span className={infoLabel}>{t.contact.address}</span>
+                  <address className={`${infoValue} not-italic`}>
+                    {formattedAddress}
+                  </address>
+                </span>
+              </li>
+            </ul>
 
             {/* Ayirici: iki icerik ayni kartta ama gorsel olarak ayri kaliyor */}
-            <hr className="my-5 sm:my-6 border-t border-green-100" />
+            <hr className="my-4 sm:my-5 border-t border-green-100" />
 
             {/* mt-auto: genis ekranda kart uzadiginda sosyal blok alta yaslanir */}
             <div className="mt-auto">
